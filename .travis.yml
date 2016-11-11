@@ -1,3 +1,6 @@
 language: ruby
 rvm:
   - 2.2.2
+
+notifications:
+  slack: taxig8:2fQ1h3yErjKhSIxnNhefdSni
