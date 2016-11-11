@@ -1,6 +1,22 @@
 language: ruby
 rvm:
   - 2.2.2
+branches:
+  only:
+  - master
+env:
+  - DB=sqlite
+  - DB=postgresql
+script:
+  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - bundle exec rake db:test:prepare
+  - bundle exec rake
+before_script:
+  - cp config/database.yml.travis config/database.yml
+  - psql -c 'create database backend_test;' -U postgres
+cache: bundler  
+services:
+  - postgresql
 
 notifications:
   slack: taxig8:2fQ1h3yErjKhSIxnNhefdSni
