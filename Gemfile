@@ -27,8 +27,8 @@ gem 'active_model_serializers', '~> 0.10.0'
 gem 'rack-cors'
 
 group :development, :test do
-  gem "rspec-rails"
-  gem "factory_girl_rails"
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
 end
 
 group :development do
