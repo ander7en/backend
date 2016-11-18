@@ -21,7 +21,7 @@ describe 'Google distance matrix API' do
   end
 
   it 'should receive success response' do
-    result = File.read('/home/andrii/project/backend/spec/fake_responses/fake_google_api_response.json')
+    result = File.read(File.dirname(__FILE__) + '/../fake_responses/fake_google_api_response.json')
     stub_request(:get, /.*maps\.googleapis\.com.*/).
         to_return(:status => 200, :body => result)
     response = GoogleAPI.time_to_reach(@src_location, @tgt_location)
