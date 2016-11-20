@@ -25,9 +25,9 @@ ActiveRecord::Schema.define(version: 20161120130722) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.float   "source_longtitude"
+    t.float   "source_longitude"
     t.float   "source_latitude"
-    t.float   "dest_longtitude"
+    t.float   "dest_longitude"
     t.float   "dest_latitude"
     t.integer "status"
     t.integer "serving_driver"
