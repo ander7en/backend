@@ -12,7 +12,7 @@ script:
   - bundle exec rake
 before_script:
   - cp config/database.yml.travis config/database.yml
-  - psql -c 'create database backend_test;' -U postgres
+  - if [[ "$DB" == "postgresql" ]]; then psql -c 'create database backend_test;' -U postgres; fi
 cache: bundler  
 services:
   - postgresql
