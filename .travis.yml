@@ -9,14 +9,13 @@ env:
   - DB=postgresql
 script:
   - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bundle exec rake db:test:prepare
   - bundle exec rake
 before_script:
   - cp config/database.yml.travis config/database.yml
-  - psql -c 'create database backend_test;' -U postgres
+  - if [[ "$DB" == "postgresql" ]]; then psql -c 'create database backend_test;' -U postgres; fi
 cache: bundler  
 services:
-  - postgresql
+  - if [[ "$DB" == "postgresql" ]]; then postgresql fi
 
 notifications:
   slack: taxig8:2fQ1h3yErjKhSIxnNhefdSni
