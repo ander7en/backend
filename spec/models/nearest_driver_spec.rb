@@ -16,7 +16,6 @@ describe 'return sorted drivers by distance' do
     driver_lounakeskus.longitude = 26.6754045
     driver_lounakeskus.latitude = 58.3570084
 
-
     sorted_drivers_by_distance = NearestDriver.getNearestDrivers(@originLocation, [driver_lounakeskus, driver_kaubamaja])
 
     expect(sorted_drivers_by_distance).to eq([driver_kaubamaja, driver_lounakeskus])
