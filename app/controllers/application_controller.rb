@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   include ActionController::RequestForgeryProtection
+  include ActionController::Cookies
   protect_from_forgery with: :null_session
   after_filter :set_csrf_cookie_for_ng
 
