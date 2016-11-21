@@ -49,6 +49,7 @@ group :test do
   gem 'launchy'
   gem 'selenium-webdriver'
   gem 'poltergeist'
+  gem 'simplecov', :require => false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
