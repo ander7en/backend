@@ -22,3 +22,6 @@
 
 *.lock
 /.idea
+
+# Coverage
+coverage
