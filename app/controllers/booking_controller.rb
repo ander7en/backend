@@ -4,6 +4,6 @@ class BookingController < ApplicationController
   end
 
   def create
-    render :json => {:message => 'Some useful actions suppose to happen in here'}
+    render :json => {:message => 'Some useful actions suppose to happen in here', :requestParams => params}
   end
 end
