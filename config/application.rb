@@ -26,8 +26,12 @@ module Backend
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
-    config.middleware.use ActionDispatch::Cookies
+    # config.middleware.use ActionDispatch::Cookies
+    # config.middleware.use ActionDispatch::Session::CookieStore
+    # config.middleware.use ActionDispatch::Flash
     config.active_job.queue_adapter = :sucker_punch
+
+    # Should be changed when deployed to heroku, in this state it allow access to anyone
 	config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
