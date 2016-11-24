@@ -13,15 +13,15 @@
 ActiveRecord::Schema.define(version: 20161120130722) do
 
   create_table "drivers", force: :cascade do |t|
-    t.text    "firstName"
-    t.text    "lastName"
-    t.        "longitude"
-    t.        "latitude"
-    t.text    "carInfo"
-    t.        "pricePerKm"
-    t.text    "created_at", null: false
-    t.text    "updated_at", null: false
-    t.integer "status"
+    t.string   "firstName"
+    t.string   "lastName"
+    t.float    "longitude"
+    t.float    "latitude"
+    t.string   "carInfo"
+    t.float    "pricePerKm"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "status"
   end
 
   create_table "orders", force: :cascade do |t|

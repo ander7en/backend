@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   get '/', to: redirect('/booking')
   get '/booking', to: 'booking#index'
   post '/booking', to: 'booking#create'
+  get '/pusher_check', to: 'booking#pusher_check'
 end
