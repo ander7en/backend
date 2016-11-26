@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe 'Google distance matrix API' do
   before(:all) do
-    @src_location = {longitude: 26.732116, latitude: 58.382482} # Raatuse 22
-    @tgt_location = {longitude: 26.715456, latitude: 58.378217} # Juhan Liivi 2
+    @src_location = {lng: 26.732116, lat: 58.382482} # Raatuse 22
+    @tgt_location = {lng: 26.715456, lat: 58.378217} # Juhan Liivi 2
   end
 
   it 'should receive response from google api' do

@@ -6,9 +6,9 @@ RSpec.describe BookingController, :type => :controller do
     it 'always returns json object' do
       post :create, params:
           {:source =>
-               {:longitude => '26.732116', :latitude => '58.382482'},
+               {:lng => '26.732116', :lat => '58.382482'},
            :target =>
-               {:longitude => '26.715456', :latitude => '58.378217'},
+               {:lng => '26.715456', :lat => '58.378217'},
            :format => :json}
       expect(response.content_type).to eq 'application/json'
     end

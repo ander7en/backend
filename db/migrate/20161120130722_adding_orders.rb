@@ -6,7 +6,6 @@ class AddingOrders < ActiveRecord::Migration[5.0]
       t.float "dest_longitude"
       t.float "dest_latitude"
       t.integer "status"
-      t.integer "serving_driver"
     end
   end
 end
