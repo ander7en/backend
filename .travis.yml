@@ -26,6 +26,7 @@ deploy:
   app: taxi-backend
   on:
     branch: production
+    condition: $DB = postgresql
   run:
     - "cp config/database.yml.travis config/database.yml"
     - "rake db:migrate"
