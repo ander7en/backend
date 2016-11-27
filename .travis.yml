@@ -27,8 +27,8 @@ deploy:
   on:
     branch: production
     condition: $DB = postgresql
+  skip_cleanup: true
   run:
-    - "cp config/database.yml.travis config/database.yml"
     - "rake db:migrate"
 
 notifications:
