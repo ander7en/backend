@@ -6,7 +6,7 @@ class NearestDriver
 
     driverList.each do |driver|
 
-      target_location = { longitude: driver.longitude , latitude: driver.latitude  }
+      target_location = {lng: driver.longitude , lat: driver.latitude  }
 
       #working on pure distance , later we can change to google api route
       #distance = GoogleAPI.distance_considering_routes(originLocation, target_location)

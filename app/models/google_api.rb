@@ -9,8 +9,8 @@ class GoogleAPI
   def self.time_to_reach(src_loc, tgt_loc)
     uri = URI(BASE_URL)
     params = {:units => 'metric',
-              :origins => "#{src_loc[:latitude]},#{src_loc[:longitude]}",
-              :destinations => "#{tgt_loc[:latitude]},#{tgt_loc[:longitude]}",
+              :origins => "#{src_loc[:lat]},#{src_loc[:lng]}",
+              :destinations => "#{tgt_loc[:lat]},#{tgt_loc[:lng]}",
               :key => API_KEY}
     uri.query = URI.encode_www_form(params)
 

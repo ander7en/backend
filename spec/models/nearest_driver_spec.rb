@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'return sorted drivers by distance' do
   before(:all) do
-    @originLocation = {longitude: 26.7124793, latitude: 58.3782485}
+    @originLocation = {lng: 26.7124793, lat: 58.3782485}
   end
 
   it 'should calculate and sort drivers by distance' do
