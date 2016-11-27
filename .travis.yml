@@ -1,21 +1,34 @@
 language: ruby
 rvm:
-  - 2.2.2
+- 2.2.2
 branches:
   only:
   - master
+  - production
 env:
-  - DB=sqlite
-  - DB=postgresql
+- DB=sqlite
+- DB=postgresql
 script:
-  - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bundle exec rake
+- RAILS_ENV=test bundle exec rake db:migrate --trace
+- bundle exec rake
 before_script:
-  - cp config/database.yml.travis config/database.yml
-  - if [[ "$DB" == "postgresql" ]]; then psql -c 'create database backend_test;' -U postgres; fi
-cache: bundler  
+- cp config/database.yml.travis config/database.yml
+- if [[ "$DB" == "postgresql" ]]; then psql -c 'create database backend_test;' -U
+  postgres; fi
+cache: bundler
 services:
-  - if [[ "$DB" == "postgresql" ]]; then postgresql fi
+- if [[ "$DB" == "postgresql" ]]; then postgresql fi
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: BeqgPA2/WgWeP2wCSZ17AWa8qQZtKduYnN/GeEqM8pJ/KqXq96DYYYD+0GFDy/6482JJHYPIUNO5aYZv31fReoUbWnn1xV6orVXFmxqBNKEQ4uURMdG4+Kh0/Z55ylYeo0Tgn+WQiIm8Q/eV8v6TrPgKm6ug9Z2PKvxJnfAbDbOYGHOE4wQRIu4QhiSMT7NkF3AoXrKeKm+ISfg7/2j5guBbdrVJS4sq2E417Xu/EdUBuxhp4sVuE71niAXIlNJzZzhQK6Gw6SSorz3Omtv75Na8B+bJCZ0KL3+k5tAiVz1X/F2VQaVvJKtqexP6Nx9tM++BrJ201WB9v+d5A/Hivig9ciu3SBZfW+PMR2+tpIzeliNFAXN5CKrdTgp+eSeckNDlyb5ED5wLs32Y3kPIDk3ORzCl5/oF05A1RAEoN78P4+Vq9+mX/czcYTr7L0VGSYi8yH02/0ywci+q85cqgVmZgEcvg6+nF727MibVTF9VzYghXX+0nERnCBnUL/cw/lSNT/q/DCaK4uacdh9Io3EBNSxBCdkZe+gxdXoa6Ih0PKrdGEG0KWkYfAlXiN8jbRiX+Wp11Wg7mgBHrOaAljjX/6A1iSf2BuIlA3cKbmImPgmi36wsNYwWMN9CIUW7/JCcq10ezWVYAkm6ByhwBdY1W+EHzh8yodGrOwaQyOQ=
+  app: taxi-backend
+  on:
+    branch: production
+  run:
+    - "cp config/database.yml.travis config/database.yml"
+    - "rake db:migrate"
 
 notifications:
   slack: taxig8:2fQ1h3yErjKhSIxnNhefdSni
