@@ -32,6 +32,7 @@ class DriverController < ApplicationController
       else
          render :json => {:text => 'Error During Registration'}
       end
+      
     else
       render :json => {:text => 'insufficient credentials!'}
     end
