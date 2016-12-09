@@ -8,7 +8,6 @@ class CreateDrivers < ActiveRecord::Migration[5.0]
       t.string :carInfo
       t.float :pricePerKm
 
-
       t.timestamps
     end
   end

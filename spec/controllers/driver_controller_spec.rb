@@ -31,6 +31,24 @@ RSpec.describe DriverController, type: :controller do
       expect(first_driver.keys).to contain_exactly('lng', 'ltd', 'car_info')
     end
 
+    it 'registers returns error message' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      status = parsed_response['text']
+      expect(status).to eq('insufficient credentials!')
+    end
+
+    it 'registers driver' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      status = parsed_response['text']
+      expect(status).to eq('Success')
+
+    end
+
     after(:all) do
       Driver.delete_all
     end
