@@ -7,8 +7,6 @@ class CreateDrivers < ActiveRecord::Migration[5.0]
       t.float :latitude
       t.string :carInfo
       t.float :pricePerKm
-      t.email :email
-      t.string :password
 
       t.timestamps
     end
