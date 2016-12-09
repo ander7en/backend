@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   get '/booking', to: 'booking#index'
   post '/booking', to: 'booking#create'
   get '/pusher_check', to: 'booking#pusher_check'
+  get '/drivers', to: 'driver#nearby_drivers'
 end
