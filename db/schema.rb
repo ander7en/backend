@@ -32,7 +32,6 @@ ActiveRecord::Schema.define(version: 20161209223935) do
     t.float   "dest_longitude"
     t.float   "dest_latitude"
     t.integer "status"
-    t.integer "serving_driver"
     t.integer "driver_id"
     t.index ["driver_id"], name: "index_orders_on_driver_id"
   end
