@@ -25,4 +25,34 @@ class DriverController < ApplicationController
     render :json => {:drivers => drivers}
   end
 
+  def login
+
+      email = params[:email]
+      password = params[:password]
+      driverId = params[:driverId]
+
+      result = LoginDriver.login(email, password, driverId)
+
+      render :json => {:text => result }
+
+  end
+
+  def register_driver
+    if (params.has_key?(:email) && params.has_key?(:password))
+      name         = params[:first_name]
+      last_name    = params[:last_name]
+      email        = params[:email]
+      password     = params[:password]
+      car_info     = params[:carInfo]
+      price_per_km = params[:price]
+
+      result = RegisterNewDriver.register(name, last_name, email, password, car_info, price_per_km)
+
+      render :json => {:text => result}
+
+    else
+      render :json => {:text => 'insufficient credentials!'}
+    end
+  end
+
 end

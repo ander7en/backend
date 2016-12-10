@@ -31,8 +31,78 @@ RSpec.describe DriverController, type: :controller do
       expect(first_driver.keys).to contain_exactly('lng', 'ltd', 'car_info')
     end
 
+    it 'registers returns error message' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      status = parsed_response['text']
+      expect(status).to eq('insufficient credentials!')
+    end
+
+    it 'registers driver' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      status = parsed_response['text']
+      expect(status).to eq('Success')
+
+    end
+
+    it 'returns error when driver is trying to register with email which was already used' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      status = parsed_response['text']
+      expect(status).to eq('Success')
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                            password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      status = parsed_response['text']
+      expect(status).to eq('Driver with that email is already registered')
+
+
+    end
+
+    it 'logins driver after registration' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      post :login, params: {email: 'john@doe.com', password: 'testpass'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      text = parsed_response['text']
+      expect(text).to eq('Success')
+    end
+
+    it 'stores driver channel_id' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      post :login, params: {email: 'john@doe.com', password: 'testpass', driverId: 'gg11' }
+      expect(response).to be_success
+      driver = Driver.where(email: 'john@doe.com').take
+      channel = DriverChannel.where(driver_id: driver.id).take
+      expect('gg11').to eq(channel.channel_id)
+    end
+
+    it 'returns error message if credentials are incorrect' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      post :login, params: {email: 'ijohn@doe.com', password: 'testpass'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      text = parsed_response['text']
+      expect(text).to eq('incorrect username or password')
+
+    end
+
     after(:all) do
       Driver.delete_all
+      DriverChannel.delete_all
     end
 
   end
