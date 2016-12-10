@@ -20,8 +20,9 @@ class DriverController < ApplicationController
 
       email = params[:email]
       password = params[:password]
+      driverId = params[:driverId]
 
-      result = LoginDriver.login(email, password)
+      result = LoginDriver.login(email, password, driverId)
 
       render :json => {:text => result }
 
