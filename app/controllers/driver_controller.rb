@@ -39,7 +39,6 @@ class DriverController < ApplicationController
       result = RegisterNewDriver.register(name, last_name, email, password, car_info, price_per_km)
 
       render :json => {:text => result}
-      
 
     else
       render :json => {:text => 'insufficient credentials!'}
