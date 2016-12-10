@@ -16,6 +16,17 @@ class DriverController < ApplicationController
     render :json => {:drivers => drivers}
   end
 
+  def login
+
+      email = params[:email]
+      password = params[:password]
+
+      result = LoginDriver.login(email, password)
+
+      render :json => {:text => result }
+
+  end
+
   def register_driver
     if (params.has_key?(:email) && params.has_key?(:password))
       name         = params[:first_name]
@@ -32,7 +43,7 @@ class DriverController < ApplicationController
       else
          render :json => {:text => 'Error During Registration'}
       end
-      
+
     else
       render :json => {:text => 'insufficient credentials!'}
     end
