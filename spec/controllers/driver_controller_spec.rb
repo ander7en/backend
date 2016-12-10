@@ -49,6 +49,29 @@ RSpec.describe DriverController, type: :controller do
 
     end
 
+    it 'logins driver after registration' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      post :login, params: {email: 'john@doe.com', password: 'testpass'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      text = parsed_response['text']
+      expect(text).to eq('john@doe.com')
+    end
+
+    it 'returns error message if credentials are incorrect' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      post :login, params: {email: 'ijohn@doe.com', password: 'testpass'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      text = parsed_response['text']
+      expect(text).to eq('incorrect username or password')
+
+    end
+
     after(:all) do
       Driver.delete_all
     end

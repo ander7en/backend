@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post '/booking', to: 'booking#create'
   get '/pusher_check', to: 'booking#pusher_check'
   get '/drivers', to: 'driver#nearby_drivers'
-  #needs to be changed later
-  post '/drivers', to: 'driver#register_driver'
+  post '/drivers/register_driver', to: 'driver#register_driver'
+  post '/drivers/login', to: 'driver#login'
+
 end
