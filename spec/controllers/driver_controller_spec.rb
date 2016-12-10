@@ -74,7 +74,7 @@ RSpec.describe DriverController, type: :controller do
       expect(response).to be_success
       parsed_response = JSON.parse(response.body)
       text = parsed_response['text']
-      expect(text).to eq('john@doe.com')
+      expect(text).to eq('Success')
     end
 
     it 'returns error message if credentials are incorrect' do
