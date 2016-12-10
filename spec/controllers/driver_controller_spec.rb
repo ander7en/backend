@@ -77,6 +77,18 @@ RSpec.describe DriverController, type: :controller do
       expect(text).to eq('Success')
     end
 
+    it 'stores driver channel_id' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      post :login, params: {email: 'john@doe.com', password: 'testpass', driverId: 'gg11' }
+      expect(response).to be_success
+      driver = Driver.where(email: 'john@doe.com').take
+      channel = DriverChannel.where(driver_id: driver.id).take
+      expect('gg11').to eq(channel.channel_id)
+
+    end
+
     it 'returns error message if credentials are incorrect' do
       post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
                                       password: 'testpass', car_info: 'M1', price: '5'}
@@ -91,6 +103,7 @@ RSpec.describe DriverController, type: :controller do
 
     after(:all) do
       Driver.delete_all
+      DriverChannel.delete_all
     end
 
   end
