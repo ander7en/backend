@@ -49,6 +49,23 @@ RSpec.describe DriverController, type: :controller do
 
     end
 
+    it 'returns error when driver is trying to register with email which was already used' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      status = parsed_response['text']
+      expect(status).to eq('Success')
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                            password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      status = parsed_response['text']
+      expect(status).to eq('Driver with that email is already registered')
+
+
+    end
+
     it 'logins driver after registration' do
       post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
                                       password: 'testpass', car_info: 'M1', price: '5'}
