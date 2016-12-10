@@ -86,7 +86,6 @@ RSpec.describe DriverController, type: :controller do
       driver = Driver.where(email: 'john@doe.com').take
       channel = DriverChannel.where(driver_id: driver.id).take
       expect('gg11').to eq(channel.channel_id)
-
     end
 
     it 'returns error message if credentials are incorrect' do
