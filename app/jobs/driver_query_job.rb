@@ -13,7 +13,6 @@ class DriverQueryJob
         #     OrderInfo: {slat: order.source_latitude, slong: order.source_longitude,
         #                 tlat: order.dest_latitude, tlong: order.source.longitude}
         # })
-
         #get respone from pusher
         response = true;
         if response
