@@ -24,10 +24,10 @@ class LoginDriver
     end
   end
 
-  def self.update_driver_status(driver_id, status, cur_location)
+  def self.update_driver_status(driver_id, status, cur_location = nil)
 
     driver = Driver.where(id: driver_id).take
-    if status then
+    if status
       driver.latitude = cur_location[:lat]
       driver.longitude = cur_location[:lng]
       driver.save
