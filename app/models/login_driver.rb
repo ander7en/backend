@@ -1,6 +1,4 @@
 class LoginDriver
-  #1)add controller witch accepts and changes driver status
-  #2)on login response return driver id
 
   def self.login(email, password, channelId)
 
