@@ -6,7 +6,7 @@ gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
 # Use sqlite3 as the database for Active Record
 if ENV['DB'] == 'postgresql'
   gem 'pg'
-else 
+else
   gem 'sqlite3'
 end
 # Use Puma as the app server
@@ -23,6 +23,8 @@ gem 'active_model_serializers', '~> 0.10.0'
 # gem 'capistrano-rails', group: :development
 
 gem 'pusher'
+
+gem 'pusher-client'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 # Sucker_Punch github: https://github.com/brandonhilkert/sucker_punch
