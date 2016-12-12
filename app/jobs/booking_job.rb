@@ -22,7 +22,7 @@ class BookingJob
         drivers_in_radius.push(driver)
       else
         sorted_drivers = NearestDriver.getNearestDrivers(srcLocation, drivers_in_radius)
-        @assigned_driver = DriverQueryJob.new.perform(sorted_drivers)
+        @assigned_driver = DriverQueryJob.perform(sorted_drivers)
         order.driver = @assigned_driver
       end
       order.status = 1
@@ -37,4 +37,3 @@ class BookingJob
     })
   end
 end
-

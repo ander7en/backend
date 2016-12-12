@@ -1,18 +1,19 @@
 class DriverQueryJob
-  include SuckerPunch::Job
+  #include SuckerPunch::Job
   #make pusher notification to driver
   #take response from notification
-  #
-  @driverList = nil
-  def perform (driverList)
-    # for the purpose of initial implementation
-  #   @driverList = driverList
-  #   driverList.each do |t|
-  #
-  #   puts t.firstName
-  #   #channel = DriverChannel.where(driver_id: )
-  # end
-    
+
+  def self.perform (driverList)
+
+    driverList.each do |t|
+
+      if !driver.channel_id.nil?
+
+      end  
+
+    end
+
     driverList[0]
+    #return Driver.where(id: driver_ids[0]).take
   end
 end
