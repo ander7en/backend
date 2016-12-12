@@ -85,7 +85,7 @@ RSpec.describe DriverController, type: :controller do
       expect(response).to be_success
       parsed_response = JSON.parse(response.body)
       driver_id = parsed_response['text']
-      post :update_driver_status, params: {driverId: driver_id, status: "free"}
+      post :update_driver_status, params: {driverId: driver_id, status: true, currentLocation: {lat:11.11, lng:11.11}}
       expect(response).to be_success
       parsed_response = JSON.parse(response.body)
       result = parsed_response['text']
@@ -93,6 +93,25 @@ RSpec.describe DriverController, type: :controller do
       driver = Driver.where(id: driver_id).take
       expect(driver.status).to eq("free")
 
+    end
+
+    it 'logs user out' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      post :login, params: {email: 'john@doe.com', password: 'testpass'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      driver_id = parsed_response['text']
+      post :update_driver_status, params: {driverId: driver_id, status: true, currentLocation: {lat:11.11, lng:11.11}}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      result = parsed_response['text']
+      expect(result).to eq('Success')
+      post :logout, params: {driver_id: driver_id}
+      expect(response).to be_success
+      driver = Driver.where(id: driver_id).take
+      expect(driver.status).to eq("busy")
     end
 
     it 'stores driver channel_id' do
