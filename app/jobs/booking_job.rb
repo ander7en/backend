@@ -14,27 +14,15 @@ class BookingJob
       order.dest_longitude = tgtLocation[:lng]
       order.dest_latitude = tgtLocation[:lat]
       order.status = 0
-      drivers = Driver.where(status: 0)
-      drivers_in_radius = drivers.select {
-        |element| LocationUtility.distance({lat: element.latitude, lng: element.longitude}, srcLocation) <= 2000
-      }
+      drivers_in_radius = DriverUtility.get_nearby_drivers(srcLocation, 2000)
       if drivers_in_radius.length <= 0
-        driver = Driver.new
-        driver.firstName = 'FakeName'
-        driver.lastName = 'FakeLastName'
-        fake_location = LocationUtility.generate_location(srcLocation)
-        driver.longitude = fake_location[:lng]
-        driver.latitude = fake_location[:lat]
-        driver.carInfo = 'FakeCarInfo'
-        driver.pricePerKm = 3.0
-        driver.status = 0
-        driver.save
+        driver = DriverUtility.generate_drivers(srcLocation, 1, 2000)
         @assigned_driver = driver
         order.driver = @assigned_driver
         drivers_in_radius.push(driver)
       else
         sorted_drivers = NearestDriver.getNearestDrivers(srcLocation, drivers_in_radius)
-        @assigned_driver = DriverQueryJob.new.perform(sorted_drivers)
+        @assigned_driver = DriverQueryJob.perform(sorted_drivers, order)
         order.driver = @assigned_driver
       end
       order.status = 1
@@ -49,4 +37,3 @@ class BookingJob
     })
   end
 end
-
