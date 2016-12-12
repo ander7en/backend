@@ -73,15 +73,33 @@ RSpec.describe DriverController, type: :controller do
       post :login, params: {email: 'john@doe.com', password: 'testpass'}
       expect(response).to be_success
       parsed_response = JSON.parse(response.body)
-      text = parsed_response['text']
-      expect(text).to eq('Success')
+      result = parsed_response['text']
+      expect(result).to be_instance_of Fixnum
+    end
+
+    it 'updates driver status' do
+      post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
+                                      password: 'testpass', car_info: 'M1', price: '5'}
+      expect(response).to be_success
+      post :login, params: {email: 'john@doe.com', password: 'testpass'}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      driver_id = parsed_response['text']
+      post :update_driver_status, params: {driverId: driver_id, status: "free"}
+      expect(response).to be_success
+      parsed_response = JSON.parse(response.body)
+      result = parsed_response['text']
+      expect(result).to eq('Success')
+      driver = Driver.where(id: driver_id).take
+      expect(driver.status).to eq("free")
+
     end
 
     it 'stores driver channel_id' do
       post :register_driver, params: {first_name: 'John', last_name: 'Doe', email: 'john@doe.com',
                                       password: 'testpass', car_info: 'M1', price: '5'}
       expect(response).to be_success
-      post :login, params: {email: 'john@doe.com', password: 'testpass', driverId: 'gg11' }
+      post :login, params: {email: 'john@doe.com', password: 'testpass', channelId: 'gg11' }
       expect(response).to be_success
       driver = Driver.where(email: 'john@doe.com').take
       channel = DriverChannel.where(driver_id: driver.id).take

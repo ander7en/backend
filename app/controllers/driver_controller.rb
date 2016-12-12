@@ -20,11 +20,11 @@ class DriverController < ApplicationController
 
       email = params[:email]
       password = params[:password]
-      driverId = params[:driverId]
+      channel_id = params[:channelId]
 
-      result = LoginDriver.login(email, password, driverId)
+      result = LoginDriver.login(email, password, channel_id)
 
-      render :json => {:text => result }
+      render :json => {:text => result}
 
   end
 
@@ -44,6 +44,17 @@ class DriverController < ApplicationController
     else
       render :json => {:text => 'insufficient credentials!'}
     end
+  end
+
+  def update_driver_status
+
+    driver_id = params[:driverId]
+    status = params[:status]
+
+    result = LoginDriver.update_driver_status(driver_id, status)
+
+    render :json => {:text => result}
+
   end
 
 end

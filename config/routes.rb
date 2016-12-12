@@ -7,5 +7,6 @@ Rails.application.routes.draw do
   get '/drivers', to: 'driver#nearby_drivers'
   post '/drivers/register_driver', to: 'driver#register_driver'
   post '/drivers/login', to: 'driver#login'
+  post '/drivers/update_driver_status', to: 'driver#update_driver_status'
 
 end
