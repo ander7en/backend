@@ -30,14 +30,14 @@ class DriverController < ApplicationController
 
   def register_driver
     if (params.has_key?(:email) && params.has_key?(:password))
-      name         = params[:first_name]
+      first_name   = params[:first_name]
       last_name    = params[:last_name]
       email        = params[:email]
       password     = params[:password]
       car_info     = params[:carInfo]
       price_per_km = params[:price]
 
-      result = RegisterNewDriver.register(name, last_name, email, password, car_info, price_per_km)
+      result = RegisterNewDriver.register(first_name, last_name, email, password, car_info, price_per_km)
 
       render :json => {:text => result}
 
