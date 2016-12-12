@@ -1,4 +1,6 @@
 class LoginDriver
+  #1)add controller witch accepts and changes driver status
+  #2)on login response return driver id
 
   def self.login(email, password, channelId)
 
@@ -10,10 +12,21 @@ class LoginDriver
         channel.driver_id = driver.id
         channel.channel_id = channelId
         channel.save!
-        return 'Success'
+        return driver.id
     else
       error = 'incorrect username or password'
       return error
     end
   end
+
+  def self.update_driver_status(driver_id, status)
+
+    driver = Driver.where(id: driver_id).take
+    driver.status = status
+    driver.save!
+
+    return 'Success'
+
+  end
+
 end
