@@ -59,8 +59,10 @@ class DriverController < ApplicationController
 
     driver_id = params[:driverId]
     status = params[:status]
-
-    result = LoginDriver.update_driver_status(driver_id, status)
+    if status
+      cur_location = params[:currentLocation]
+    end
+    result = LoginDriver.update_driver_status(driver_id, status, cur_location)
 
     render :json => {:text => result}
 
