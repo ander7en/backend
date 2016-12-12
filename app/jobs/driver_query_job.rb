@@ -19,10 +19,7 @@ class DriverQueryJob
         if response
             return t
         end
-
       end
-
-    end
-    #driverList[0]
+     end
   end
 end
