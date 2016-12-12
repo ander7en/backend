@@ -6,11 +6,18 @@ class LoginDriver
 
     if !driver.nil?
         #insert driver channel to db
-        channel = DriverChannel.new
-        channel.driver_id = driver.id
-        channel.channel_id = channelId
-        channel.save!
-        return driver.id
+        if DriverChannel.exists?(driver_id: driver.id)
+          channel = DriverChannel.where(driver_id: driver.id)
+          channel.channel_id = channelId
+          channel.save!
+          return driver.id
+        else
+          channel = DriverChannel.new
+          channel.driver_id = driver.id
+          channel.channel_id = channelId
+          channel.save!
+          return driver.id
+        end
     else
       error = 'incorrect username or password'
       return error
