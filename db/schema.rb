@@ -10,12 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161212181238) do
+ActiveRecord::Schema.define(version: 20161213010724) do
 
   create_table "driver_channels", force: :cascade do |t|
     t.string  "channel_id"
     t.integer "driver_id"
     t.index ["driver_id"], name: "index_driver_channels_on_driver_id"
+  end
+
+  create_table "driver_query", force: :cascade do |t|
+    t.string   "user_channel_id"
+    t.integer  "driver_id"
+    t.integer  "order_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "drivers", force: :cascade do |t|
