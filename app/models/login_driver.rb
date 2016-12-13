@@ -7,7 +7,7 @@ class LoginDriver
     if !driver.nil?
         #insert driver channel to db
         if DriverChannel.exists?(driver_id: driver.id)
-          channel = DriverChannel.where(driver_id: driver.id)
+          channel = DriverChannel.where(driver_id: driver.id).take
           channel.channel_id = channelId
           channel.save!
           return driver.id
@@ -27,14 +27,17 @@ class LoginDriver
   def self.update_driver_status(driver_id, status, cur_location = nil)
 
     driver = Driver.where(id: driver_id).take
+
     if status
       driver.latitude = cur_location[:lat]
       driver.longitude = cur_location[:lng]
       driver.save
       driver.free!
     else
-      driver.busy!
+      driver.status = 1
+      driver.save!
     end
+
     return 'Success'
 
   end
