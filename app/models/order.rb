@@ -1,4 +1,4 @@
 class Order < ApplicationRecord
   enum status: [:waiting, :serving, :finished]
-  belongs_to :driver, class_name: "Driver"
+  belongs_to :driver, class_name: "Driver", required: false
 end

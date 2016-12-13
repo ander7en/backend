@@ -71,11 +71,21 @@ class DriverController < ApplicationController
   def logout
 
     driver_id = params[:driver_id]
-    status = 1
+    status = false
 
     result = LoginDriver.update_driver_status(driver_id, status)
 
     render :json => {:text => result}
+  end
+
+
+  def finish
+
+    order_id = params[:orderId]
+
+    result = NotifyDriver.finish_ride(order_id)
+    render :json => {:text => result}
+
   end
 
 end
