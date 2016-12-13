@@ -71,7 +71,7 @@ class DriverController < ApplicationController
   def logout
 
     driver_id = params[:driver_id]
-    status = 1
+    status = false
 
     result = LoginDriver.update_driver_status(driver_id, status)
 
