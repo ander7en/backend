@@ -8,6 +8,7 @@ class NotifyDriver
 
     if !channel.nil? && !channel.channel_id.nil?
     order = Order.where(id: order_id).take
+
     Pusher.trigger(channel.channel_id + '_channel', 'notify', {
         OrderInfo: {slat: order.source_latitude, slong: order.source_longitude,
                     tlat: order.dest_latitude, tlong: order.dest_longitude},
@@ -30,6 +31,8 @@ class NotifyDriver
       srcLocation = {lat: order.source_latitude, lng: order.source_longitude}
 
       driver = SetStatus.driver(driver_id,1)
+      order.driver_id = driver.id
+      order.save
 
       driverQuery = DriverQuery.where(driver_id: driver_id, order_id: order_id).take
 
@@ -40,11 +43,19 @@ class NotifyDriver
       })
 
     else
+      user_channel_id = DriverQuery.where(driver_id: driver_id, order_id: order_id).take.user_channel_id
       #removing currently selected driver
-      DriverQuery.where(driver_id: driver_id, order_id: order_id).take.destroy
+      DriverQuery.where(driver_id: driver_id, order_id: order_id).take.destroy!
       #querying new driver
-      next_driver = DriverQuery.where(order_id: order_id).take 1
-      NotifyDriver.notify(next_driver.id,order_id)
+
+      next_driver = DriverQuery.where(order_id: order_id).take
+
+      if next_driver.nil?
+        Pusher.trigger(user_channel_id + '_channel', 'error',
+                       {message: 'No available drivers for your order'})
+      else
+        NotifyDriver.notify(next_driver.id,order_id)
+      end
     end
   end
 
