@@ -43,7 +43,7 @@ class NotifyDriver
       #removing currently selected driver
       DriverQuery.where(driver_id: driver_id, order_id: order_id).destroy
       #querying new driver
-      next_driver = DriverQuery.where(order_id: oreder_id).take 1
+      next_driver = DriverQuery.where(order_id: order_id).take 1
       NotifyDriver.notify(next_driver.id)
     end
 
