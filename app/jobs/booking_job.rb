@@ -14,6 +14,7 @@ class BookingJob
       order.dest_longitude = tgtLocation[:lng]
       order.dest_latitude = tgtLocation[:lat]
       order.status = 0
+      order.save
       drivers_in_radius = DriverUtility.get_nearby_drivers(srcLocation, 2000)
       if drivers_in_radius.length <= 0
         driver = DriverUtility.generate_drivers(srcLocation, 1, 2000)

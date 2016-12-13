@@ -4,7 +4,6 @@ class BookingController < ApplicationController
   end
 
   def create
-    debugger
     BookingJob.perform_async(params[:userId], params[:srcLocation], params[:tgtLocation])
     render :json => {:message => 'OK', :requestParams => params}
   end

@@ -5,6 +5,7 @@ class DriverQueryJob
     driver_query = DriverQuery.new
     driver_query.user_channel_id = user_channel_id
     driver_query.driver_id = t.id
+    puts order.id
     driver_query.order_id = order.id
     driver_query.save
     end

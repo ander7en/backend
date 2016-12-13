@@ -7,8 +7,8 @@ class NotifyDriver
     channel = DriverChannel.where(driver_id: driver_id).take
 
     if !channel.nil? && !channel.channel_id.nil?
-
-    Pusher.trigger(channel_id + '_channel', 'notify', {
+    order = Order.where(id: order_id).take
+    Pusher.trigger(channel.channel_id + '_channel', 'notify', {
         OrderInfo: {slat: order.source_latitude, slong: order.source_longitude,
                     tlat: order.dest_latitude, tlong: order.dest_longitude},
         OrderId: order_id
@@ -41,12 +41,11 @@ class NotifyDriver
 
     else
       #removing currently selected driver
-      DriverQuery.where(driver_id: driver_id, order_id: order_id).destroy
+      DriverQuery.where(driver_id: driver_id, order_id: order_id).take.destroy
       #querying new driver
       next_driver = DriverQuery.where(order_id: order_id).take 1
       NotifyDriver.notify(next_driver.id,order_id)
     end
-
   end
 
 end
