@@ -2,7 +2,7 @@
 class NotifyDriver
 
 
-  def self.notify(driver_id)
+  def self.notify(driver_id,order_id)
 
     channel = DriverChannel.where(driver_id: driver_id).take
 
@@ -11,7 +11,7 @@ class NotifyDriver
     Pusher.trigger(channel_id + '_channel', 'notify', {
         OrderInfo: {slat: order.source_latitude, slong: order.source_longitude,
                     tlat: order.dest_latitude, tlong: order.dest_longitude},
-        OrderId: order.id
+        OrderId: order_id
     })
 
     end
@@ -44,7 +44,7 @@ class NotifyDriver
       DriverQuery.where(driver_id: driver_id, order_id: order_id).destroy
       #querying new driver
       next_driver = DriverQuery.where(order_id: order_id).take 1
-      NotifyDriver.notify(next_driver.id)
+      NotifyDriver.notify(next_driver.id,order_id)
     end
 
   end
