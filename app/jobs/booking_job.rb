@@ -20,20 +20,26 @@ class BookingJob
         @assigned_driver = driver
         order.driver = @assigned_driver
         drivers_in_radius.push(driver)
+        order.status = 1
+        order.save
+        @assigned_driver.status = 1
+        @assigned_driver.save
+
       else
         sorted_drivers = NearestDriver.getNearestDrivers(srcLocation, drivers_in_radius)
-        @assigned_driver = DriverQueryJob.perform(sorted_drivers, order)
-        order.driver = @assigned_driver
+        DriverQueryJob.perform(sorted_drivers, order, userId)
+        #order.driver = @assigned_driver
       end
-      order.status = 1
-      order.save
-      @assigned_driver.status = 1
-      @assigned_driver.save
+      #change order status and driver status
+      # order.status = 1
+      # order.save
+      # @assigned_driver.status = 1
+      # @assigned_driver.save
     end
-    Pusher.trigger(@user_id + '_channel', 'update', {
-        carInfo: @assigned_driver.carInfo,
-        arrivalTime: GoogleAPI.time_to_reach({lat: @assigned_driver.latitude, lng: @assigned_driver.longitude},
-                                             @src_location)
-    })
+    # Pusher.trigger(@user_id + '_channel', 'update', {
+    #     carInfo: @assigned_driver.carInfo,
+    #     arrivalTime: GoogleAPI.time_to_reach({lat: @assigned_driver.latitude, lng: @assigned_driver.longitude},
+    #                                          @src_location)
+    # })
   end
 end
