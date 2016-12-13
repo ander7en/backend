@@ -10,12 +10,13 @@ class NotifyDriver
     channel = DriverChannel.where(driver_id: driver_query.driver_id).take
 
     if !channel.nil? && !channel.channel_id.nil?
-
-    Pusher.trigger(channel.channel_id + '_channel', 'notify', {
-        OrderInfo: {slat: order.source_latitude, slong: order.source_longitude,
-                    tlat: order.dest_latitude, tlong: order.dest_longitude},
-        OrderId: order.id
-    })
+      source_address = GoogleAPI.location_to_address({lat: order.source_latitude, lng: order.source_longitude})
+      destination_address = GoogleAPI.location_to_address({lat: order.dest_latitude, lng: order.dest_longitude})
+      Pusher.trigger(channel.channel_id + '_channel', 'notify', {
+          OrderInfo: {source_address: source_address,
+                      destination_address: destination_address},
+          OrderId: order.id
+      })
     end
 
   end
