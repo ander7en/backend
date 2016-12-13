@@ -9,5 +9,4 @@ Rails.application.routes.draw do
   post '/drivers/login', to: 'driver#login'
   post '/drivers/change_status', to: 'driver#update_driver_status'
   post '/drivers/logout', to: 'driver#logout'
-  get '/pusher/auth', to: 'pusher#auth'
 end
