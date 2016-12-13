@@ -24,7 +24,6 @@ class BookingJob
         order.save
         @assigned_driver.status = 1
         @assigned_driver.save
-
       else
         sorted_drivers = NearestDriver.getNearestDrivers(srcLocation, drivers_in_radius)
         DriverQueryJob.perform(sorted_drivers, order, userId)
