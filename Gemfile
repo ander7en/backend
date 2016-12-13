@@ -24,7 +24,6 @@ gem 'active_model_serializers', '~> 0.10.0'
 
 gem 'pusher'
 
-gem 'pusher-client'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 # Sucker_Punch github: https://github.com/brandonhilkert/sucker_punch
