@@ -10,7 +10,6 @@ class NotifyDriver
     channel = DriverChannel.where(driver_id: driver_query.driver_id).take
 
     if !channel.nil? && !channel.channel_id.nil?
-
     Pusher.trigger(channel.channel_id + '_channel', 'notify', {
         OrderInfo: {slat: order.source_latitude, slong: order.source_longitude,
                     tlat: order.dest_latitude, tlong: order.dest_longitude},
@@ -51,7 +50,6 @@ class NotifyDriver
       order = Order.find(order_id)
       NotifyDriver.notify(order)
     end
-
   end
 
 end

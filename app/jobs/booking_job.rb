@@ -14,33 +14,21 @@ class BookingJob
       order.dest_longitude = tgtLocation[:lng]
       order.dest_latitude = tgtLocation[:lat]
       order.status = 0
-      order.save!
+      order.save
       drivers_in_radius = DriverUtility.get_nearby_drivers(srcLocation, 2000)
       if drivers_in_radius.length <= 0
-        puts "No drivers Creatung some Drivers"
         driver = DriverUtility.generate_drivers(srcLocation, 1, 2000)
-        order.driver = driver
-        drivers_in_radius.push(driver)
+        first_driver = driver[0]
+        order.driver = first_driver
+        drivers_in_radius.push(first_driver)
         order.status = 1
         order.save
-        driver.status = 1
-        driver.save
+        first_driver.status = 1
+        first_driver.save
       else
-        puts "Drivers Found"
         sorted_drivers = NearestDriver.getNearestDrivers(srcLocation, drivers_in_radius)
         DriverQueryJob.perform(sorted_drivers, order, userId)
-        #order.driver = @assigned_driver
       end
-      #change order status and driver status
-      # order.status = 1
-      # order.save
-      # @assigned_driver.status = 1
-      # @assigned_driver.save
     end
-    # Pusher.trigger(@user_id + '_channel', 'update', {
-    #     carInfo: @assigned_driver.carInfo,
-    #     arrivalTime: GoogleAPI.time_to_reach({lat: @assigned_driver.latitude, lng: @assigned_driver.longitude},
-    #                                          @src_location)
-    # })
   end
 end
