@@ -10,11 +10,13 @@ class NotifyDriver
     channel = DriverChannel.where(driver_id: driver_query.driver_id).take
 
     if !channel.nil? && !channel.channel_id.nil?
-    Pusher.trigger(channel.channel_id + '_channel', 'notify', {
-        OrderInfo: {slat: order.source_latitude, slong: order.source_longitude,
-                    tlat: order.dest_latitude, tlong: order.dest_longitude},
-        OrderId: order.id
-    })
+      source_address = GoogleAPI.location_to_address({lat: order.source_latitude, lng: order.source_longitude})
+      destination_address = GoogleAPI.location_to_address({lat: order.dest_latitude, lng: order.dest_longitude})
+      Pusher.trigger(channel.channel_id + '_channel', 'notify', {
+          OrderInfo: {source_address: source_address,
+                      destination_address: destination_address},
+          OrderId: order.id
+      })
     end
 
   end
@@ -31,6 +33,8 @@ class NotifyDriver
       src_location = {lat: order.source_latitude, lng: order.source_longitude}
 
       driver = SetStatus.driver(driver_id,1)
+      order.driver_id = driver.id
+      order.save
 
       driver_query = DriverQuery.where(driver_id: driver_id, order_id: order_id).take
       order.driver_id = driver_id
@@ -43,11 +47,16 @@ class NotifyDriver
       })
 
     else
-      #removing currently selected driver
       dq = DriverQuery.where(driver_id: driver_id, order_id: order_id).take
+      user_channel_id = dq.user_channel_id
       dq.destroy
 
       order = Order.find(order_id)
+      if DriverQuery.where(order_id: order.id).take.nil?
+        Pusher.trigger(user_channel_id + '_channel', 'error',
+                       {message: 'No available drivers for your order'})
+        return
+      end
       NotifyDriver.notify(order)
     end
   end

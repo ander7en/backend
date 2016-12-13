@@ -31,7 +31,7 @@ class GoogleAPI
   end
 
   def self.location_to_address(location)
-    uri = URI(BASE_URL)
+    uri = URI(GEOCODING_URL)
     params = {:latlng => "#{location[:lat]},#{location[:lng]}",
               :result_type => 'street_address',
               :key => GEOCODING_API_KEY}
@@ -44,8 +44,7 @@ class GoogleAPI
       res = http.request request # Net::HTTPResponse object
       if res.is_a?(Net::HTTPSuccess)
         response_hash = JSON.parse(res.body.to_s, {:symbolize_names => true})
-        puts response_hash[:formatted_address]
-        return response_hash[:formatted_address]
+        return response_hash[:results][0][:formatted_address]
       else
         puts FAIL_STRING
         return FAIL_STRING
