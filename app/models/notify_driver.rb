@@ -2,19 +2,20 @@
 class NotifyDriver
 
 
-  def self.notify(driver_id,order_id)
+  def self.notify(order)
 
-    channel = DriverChannel.where(driver_id: driver_id).take
+    #querying new driver
+    driver_query = DriverQuery.where(order_id: order.id).take
+
+    channel = DriverChannel.where(driver_id: driver_query.driver_id).take
 
     if !channel.nil? && !channel.channel_id.nil?
-    order = Order.where(id: order_id).take
 
     Pusher.trigger(channel.channel_id + '_channel', 'notify', {
         OrderInfo: {slat: order.source_latitude, slong: order.source_longitude,
                     tlat: order.dest_latitude, tlong: order.dest_longitude},
-        OrderId: order_id
+        OrderId: order.id
     })
-
     end
 
   end
@@ -28,35 +29,60 @@ class NotifyDriver
 
       order = SetStatus.order(order_id,1)
 
-      srcLocation = {lat: order.source_latitude, lng: order.source_longitude}
+      src_location = {lat: order.source_latitude, lng: order.source_longitude}
 
       driver = SetStatus.driver(driver_id,1)
       order.driver_id = driver.id
       order.save
 
-      driverQuery = DriverQuery.where(driver_id: driver_id, order_id: order_id).take
+      driver_query = DriverQuery.where(driver_id: driver_id, order_id: order_id).take
+      order.driver_id = driver_id
+      order.save
 
-      Pusher.trigger(driverQuery.user_channel_id + '_channel', 'update', {
+      Pusher.trigger(driver_query.user_channel_id + '_channel', 'update', {
           carInfo: driver.carInfo,
           arrivalTime: GoogleAPI.time_to_reach({lat: driver.latitude, lng: driver.longitude},
-                                               srcLocation)
+                                               src_location)
       })
 
     else
-      user_channel_id = DriverQuery.where(driver_id: driver_id, order_id: order_id).take.user_channel_id
-      #removing currently selected driver
-      DriverQuery.where(driver_id: driver_id, order_id: order_id).take.destroy!
-      #querying new driver
+      dq = DriverQuery.where(driver_id: driver_id, order_id: order_id).take
+      user_channel_id = dq.user_channel_id
+      dq.destroy
 
-      next_driver = DriverQuery.where(order_id: order_id).take
-
-      if next_driver.nil?
+      order = Order.find(order_id)
+      if DriverQuery.where(order_id: order.id).take.nil?
         Pusher.trigger(user_channel_id + '_channel', 'error',
                        {message: 'No available drivers for your order'})
-      else
-        NotifyDriver.notify(next_driver.id,order_id)
+        return
       end
+      NotifyDriver.notify(order)
     end
+  end
+
+  def self.finish_ride(order_id)
+
+    order = Order.find(order_id)
+    SetStatus.order(order_id, 2)
+
+    driver = Driver.find(order.driver_id)
+    SetStatus.driver(driver.id, 0)
+
+    driver_query = DriverQuery.where(order_id: order_id, driver_id: driver.id).take
+    channel = driver_query.user_channel_id
+
+  #   Price calculation
+    distance = LocationUtility.distance({lat: order.source_latitude, lng: order.source_longitude},
+                                        {lat: order.dest_latitude, lng: order.dest_longitude})
+    total = distance * driver.pricePerKm
+
+    Pusher.trigger(channel + '_channel', 'update', {
+        carInfo: 0,
+        price: total
+    })
+
+    "OK"
+
   end
 
 end

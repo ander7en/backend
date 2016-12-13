@@ -78,4 +78,14 @@ class DriverController < ApplicationController
     render :json => {:text => result}
   end
 
+
+  def finish
+
+    order_id = params[:orderId]
+
+    result = NotifyDriver.finish_ride(order_id)
+    render :json => {:text => result}
+
+  end
+
 end

@@ -86,6 +86,7 @@ RSpec.describe DriverController, type: :controller do
       parsed_response = JSON.parse(response.body)
       driver_id = parsed_response['text']
       post :update_driver_status, params: {driverId: driver_id, status: true, currentLocation: {lat:11.11, lng:11.11}}
+
       expect(response).to be_success
       parsed_response = JSON.parse(response.body)
       result = parsed_response['text']

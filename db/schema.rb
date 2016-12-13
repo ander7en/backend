@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161213010724) do
+ActiveRecord::Schema.define(version: 20161213054854) do
 
   create_table "driver_channels", force: :cascade do |t|
     t.string  "channel_id"
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20161213010724) do
     t.float   "dest_latitude"
     t.integer "status"
     t.integer "driver_id"
-    t.index ["driver_id"], name: "index_orders_on_driver_id"
+    t.integer "price"
   end
 
 end
