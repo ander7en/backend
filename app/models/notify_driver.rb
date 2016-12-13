@@ -4,6 +4,7 @@ class NotifyDriver
 
   def self.notify(order)
 
+    #querying new driver
     driver_query = DriverQuery.where(order_id: order.id).take
 
     channel = DriverChannel.where(driver_id: driver_query.driver_id).take
@@ -28,24 +29,27 @@ class NotifyDriver
 
       order = SetStatus.order(order_id,1)
 
-      srcLocation = {lat: order.source_latitude, lng: order.source_longitude}
+      src_location = {lat: order.source_latitude, lng: order.source_longitude}
 
       driver = SetStatus.driver(driver_id,1)
 
-      driverQuery = DriverQuery.where(driver_id: driver_id, order_id: order_id).take
+      driver_query = DriverQuery.where(driver_id: driver_id, order_id: order_id).take
+      order.driver_id = driver_id
+      order.save
 
-      Pusher.trigger(driverQuery.user_channel_id + '_channel', 'update', {
+      Pusher.trigger(driver_query.user_channel_id + '_channel', 'update', {
           carInfo: driver.carInfo,
           arrivalTime: GoogleAPI.time_to_reach({lat: driver.latitude, lng: driver.longitude},
-                                               srcLocation)
+                                               src_location)
       })
 
     else
       #removing currently selected driver
-      DriverQuery.where(driver_id: driver_id, order_id: order_id).destroy
-      #querying new driver
-      next_driver = DriverQuery.where(order_id: order_id).take 1
-      NotifyDriver.notify(next_driver.id)
+      dq = DriverQuery.where(driver_id: driver_id, order_id: order_id).take
+      dq.destroy
+
+      order = Order.find(order_id)
+      NotifyDriver.notify(order)
     end
 
   end
