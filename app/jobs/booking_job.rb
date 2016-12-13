@@ -14,18 +14,19 @@ class BookingJob
       order.dest_longitude = tgtLocation[:lng]
       order.dest_latitude = tgtLocation[:lat]
       order.status = 0
+      order.save!
       drivers_in_radius = DriverUtility.get_nearby_drivers(srcLocation, 2000)
       if drivers_in_radius.length <= 0
+        puts "No drivers Creatung some Drivers"
         driver = DriverUtility.generate_drivers(srcLocation, 1, 2000)
-        @assigned_driver = driver
-        order.driver = @assigned_driver
+        order.driver = driver
         drivers_in_radius.push(driver)
         order.status = 1
         order.save
-        @assigned_driver.status = 1
-        @assigned_driver.save
-
+        driver.status = 1
+        driver.save
       else
+        puts "Drivers Found"
         sorted_drivers = NearestDriver.getNearestDrivers(srcLocation, drivers_in_radius)
         DriverQueryJob.perform(sorted_drivers, order, userId)
         #order.driver = @assigned_driver

@@ -2,18 +2,19 @@
 class NotifyDriver
 
 
-  def self.notify(driver_id)
+  def self.notify(order)
 
-    channel = DriverChannel.where(driver_id: driver_id).take
+    driver_query = DriverQuery.where(order_id: order.id).take
+
+    channel = DriverChannel.where(driver_id: driver_query.driver_id).take
 
     if !channel.nil? && !channel.channel_id.nil?
 
-    Pusher.trigger(channel_id + '_channel', 'notify', {
+    Pusher.trigger(channel.channel_id + '_channel', 'notify', {
         OrderInfo: {slat: order.source_latitude, slong: order.source_longitude,
                     tlat: order.dest_latitude, tlong: order.dest_longitude},
         OrderId: order.id
     })
-
     end
 
   end
