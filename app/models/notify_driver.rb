@@ -52,4 +52,29 @@ class NotifyDriver
     end
   end
 
+  def self.finish_ride(order_id)
+
+    order = Order.find(order_id)
+    SetStatus.order(order_id, 2)
+
+    driver = Driver.find(order.driver_id)
+    SetStatus.driver(driver.id, 0)
+
+    driver_query = DriverQuery.where(order_id: order_id, driver_id: driver.id).take
+    channel = driver_query.user_channel_id
+
+  #   Price calculation
+    distance = LocationUtility.distance({lat: order.source_latitude, lng: order.source_longitude},
+                                        {lat: order.dest_latitude, lng: order.dest_longitude})
+    total = distance * driver.pricePerKm
+
+    Pusher.trigger(channel + '_channel', 'update', {
+        carInfo: 0,
+        price: total
+    })
+
+    "OK"
+
+  end
+
 end

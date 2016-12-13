@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post '/drivers/login', to: 'driver#login'
   post '/drivers/change_status', to: 'driver#update_driver_status'
   post '/drivers/logout', to: 'driver#logout'
+  post '/drivers/finish', to: 'driver#finish'
   post '/drivers/response', to: 'notification#receive'
   post '/notification/receive', to: 'notification#receive'
 end
