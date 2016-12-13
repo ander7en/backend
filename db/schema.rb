@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20161213054854) do
     t.integer "status"
     t.integer "driver_id"
     t.integer "price"
+    t.index ["driver_id"], name: "index_orders_on_driver_id"
   end
 
 end
