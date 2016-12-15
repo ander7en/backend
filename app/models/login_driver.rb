@@ -34,8 +34,8 @@ class LoginDriver
       driver.save
       driver.free!
     else
-      driver.status = 1
-      driver.save!
+      driver.busy!
+      # driver.save!
     end
 
     return 'Success'
