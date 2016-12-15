@@ -32,9 +32,11 @@ class DriverController < ApplicationController
       channel_id = params[:channelId]
 
       result = LoginDriver.login(email, password, channel_id)
-
-      render :json => {:text => result}
-
+      if result != 'incorrect username or password'
+        render :json => {:text => result, wasSuccessful: 'success'}
+      else
+        render :json => {:text => result, wasSuccessful: 'fail'}
+      end
   end
 
   def register_driver
