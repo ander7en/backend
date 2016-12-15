@@ -73,9 +73,9 @@ class NotifyDriver
     channel = driver_query.user_channel_id
 
   #   Price calculation
-    distance = LocationUtility.distance({lat: order.source_latitude, lng: order.source_longitude},
+    distance = GoogleAPI.distance({lat: order.source_latitude, lng: order.source_longitude},
                                         {lat: order.dest_latitude, lng: order.dest_longitude})
-    total = distance * driver.pricePerKm
+    total = distance/1000.0 * driver.pricePerKm
 
     Pusher.trigger(channel + '_channel', 'update', {
         carInfo: 0,
