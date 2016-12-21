@@ -1,7 +1,5 @@
 #this should be asyncronous
 class NotifyDriver
-
-
   def self.notify(order)
 
     #querying new driver
@@ -18,12 +16,9 @@ class NotifyDriver
           OrderId: order.id
       })
     end
-
   end
 
-
   def self.driver_response(driver_id, response, order_id)
-
     if response
       #deleting all other driver but this
       #to do
@@ -53,8 +48,8 @@ class NotifyDriver
 
       order = Order.find(order_id)
       if DriverQuery.where(order_id: order.id).take.nil?
-        Pusher.trigger(user_channel_id + '_channel', 'error',
-                       {message: 'No available drivers for your order'})
+        Pusher.trigger(userId + '_channel', 'error',
+                       {message: 'No available drivers for your order. We are sorry :('})
         return
       end
       NotifyDriver.notify(order)
@@ -85,5 +80,4 @@ class NotifyDriver
     "OK"
 
   end
-
 end
