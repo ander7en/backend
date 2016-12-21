@@ -1,29 +1,29 @@
 class DriverController < ApplicationController
 
-  def nearby_drivers
+  # def nearby_drivers
 
-    lng = params[:lng].to_f
-    lat = params[:lat].to_f
+  #   lng = params[:lng].to_f
+  #   lat = params[:lat].to_f
 
-    if lng == 0.0 or lat == 0.0
-      raise 'Bad Request'
-    end
+  #   if lng == 0.0 or lat == 0.0
+  #     raise 'Bad Request'
+  #   end
 
-    nearby_drivers = DriverUtility.get_nearby_drivers({ :lng => lng, :lat => lat})
+  #   nearby_drivers = DriverUtility.get_nearby_drivers({ :lng => lng, :lat => lat})
 
-    # TODO ADD ENV CHECK IF IN DEMO MODE ONLY
-    if nearby_drivers.empty?
-      nearby_drivers = DriverUtility.generate_drivers({:lng => lng, :lat => lat}, 10, 2000)
-    end
+  #   # TODO ADD ENV CHECK IF IN DEMO MODE ONLY
+  #   if nearby_drivers.empty?
+  #     nearby_drivers = DriverUtility.generate_drivers({:lng => lng, :lat => lat}, 10, 2000)
+  #   end
 
-    drivers = []
+  #   drivers = []
 
-    nearby_drivers.each do |driver|
-      drivers.append({:lng => driver.longitude, :ltd => driver.latitude, :car_info=> driver.carInfo})
-    end
+  #   nearby_drivers.each do |driver|
+  #     drivers.append({:lng => driver.longitude, :ltd => driver.latitude, :car_info=> driver.carInfo})
+  #   end
 
-    render :json => {:drivers => drivers}
-  end
+  #   render :json => {:drivers => drivers}
+  # end
 
   def login
 
