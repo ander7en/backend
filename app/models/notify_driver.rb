@@ -48,7 +48,7 @@ class NotifyDriver
 
       order = Order.find(order_id)
       if DriverQuery.where(order_id: order.id).take.nil?
-        Pusher.trigger(userId + '_channel', 'error',
+        Pusher.trigger(user_channel_id + '_channel', 'error',
                        {message: 'No available drivers for your order. We are sorry :('})
         return
       end
