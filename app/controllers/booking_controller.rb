@@ -5,6 +5,6 @@ class BookingController < ApplicationController
 
   def create
     BookingJob.perform_async(params[:userId], params[:srcLocation], params[:tgtLocation])
-    render :json => {:message => 'OK', :requestParams => params}
+    render :json => {:message => 'OK'}
   end
 end
